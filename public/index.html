@@ -1,0 +1,261 @@
+<!doctype html>
+
+<!-- ASSIGN OUR ANGULAR MODULE -->
+<html ng-app="application">
+<head>
+	<!-- META -->
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1"><!-- Optimize mobile viewport -->
+
+	<title>Node/Angular Todo App</title>
+
+	<!-- SCROLLS -->
+	<link rel="stylesheet" href="http://getbootstrap.com/dist/css/bootstrap.min.css"><!-- load bootstrap -->
+	<style>
+		html 					{ overflow-y:scroll; }
+		body 					{ padding-top:50px; }
+		#todo-list 				{ margin-bottom:30px; }
+		#todo-form 	 			{ margin-bottom:50px; }
+
+		carousel{
+    color: #666;
+    background: #333;
+    height: 300px !important;
+    padding-top: 90px;
+    display: block;
+    font-size: 52px;
+    text-align: center;    
+    font-family: "trebuchet ms", sans-serif;    
+}
+.bs-example{
+	margin: 20px;
+}
+	</style>
+
+	<!-- SPELLS -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+	<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.8/angular.min.js"></script><!-- load angular -->
+	<script src="http://getbootstrap.com/dist/js/bootstrap.min.js"></script><!-- load angular -->
+	<script src="core.js"></script>
+
+</head>
+<!-- SET THE CONTROLLER AND GET ALL TODOS WITH INITIALIZE FUNCTION -->
+<body ng-controller="mainController">
+
+  <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#">Project name</a>
+        </div>
+        <div class="collapse navbar-collapse">
+          <ul class="nav navbar-nav">
+            <li class="active"><a href="#">Home</a></li>
+            <li><a href="#about">About</a></li>
+            <li><a href="#contact">Contact</a></li>
+          </ul>
+        </div><!--/.nav-collapse -->
+      </div>
+    </div>
+
+
+<div class="template" style="padding: 40px;">
+
+
+<!-- Button trigger modal -->
+
+<!-- Modal -->
+<div class="modal fade" id="edit" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="myModalLabel">Editer un objet</h4>
+      </div>
+      <div class="modal-body">
+        <form class="form-horizontal" role="form" ng-repeat="todo in todos | filter:fiche">
+			<div class="form-group">
+				<!-- BIND THIS VALUE TO formData.text IN ANGULAR -->
+				<input type="text" class="form-control input-lg text-center" placeholder="{{todo.nom}}" ng-model="formData.nom">
+				<input type="text" class="form-control input-lg text-center"  placeholder="{{todo.auteur}}" ng-model="formData.auteur">
+				<select class="form-control input-lg text-center" class="form-control input-lg text-center" ng-model="formData.type">
+				  <option>1</option>
+				</select>				
+				<input type="text" class="form-control input-lg text-center"  placeholder="{{todo.sstype}}" ng-model="formData.sstype">				
+				<textarea class="form-control input-lg text-center" rows="3" placeholder="{{todo.description}}" ng-model="formData.description"></textarea>
+				<input type="text" class="form-control input-lg text-center"  placeholder="{{todo.materiaux}}" ng-model="formData.materiaux">
+				<input type="date" class="form-control input-lg text-center"  placeholder="{{todo.date}}" ng-model="formData.date">
+				<input type="text" class="form-control input-lg text-center"  placeholder="{{todo.origine}}" ng-model="formData.origine">
+				<input type="text" class="form-control input-lg text-center"  placeholder="{{todo.valeur}}" ng-model="formData.valeur">
+				<input type="text"  class="form-control input-lg text-center"  placeholder="Image" ng-model="formData.image">
+			</div>
+
+
+			<!-- createToDo() WILL CREATE NEW TODOS -->
+			<button type="submit" class="btn btn-primary btn-lg" data-dismiss="modal" ng-click="editTodo(todo._id)">Add</button>
+		</form>
+     </div>
+     <div class="modal-footer">
+Copyright
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="myModalLabel">Ajouter un objet</h4>
+      </div>
+      <div class="modal-body">
+        <form class="form-horizontal" role="form">
+			<div class="form-group">
+				<!-- BIND THIS VALUE TO formData.text IN ANGULAR -->
+				<input type="text" class="form-control input-lg text-center" placeholder="Nom" ng-model="formData.nom">
+				<input type="text" class="form-control input-lg text-center"  placeholder="Auteur" ng-model="formData.auteur">
+				<select class="form-control input-lg text-center" class="form-control input-lg text-center" ng-model="formData.type">
+				  <option>1</option>
+				  <option>2</option>
+				  <option>3</option>
+				  <option>4</option>
+				  <option>5</option>
+				</select>				
+				<input type="text" class="form-control input-lg text-center"  placeholder="Sous-type" ng-model="formData.sstype">				
+				<textarea class="form-control input-lg text-center" rows="3" placeholder="Description" ng-model="formData.description"></textarea>
+				<input type="text" class="form-control input-lg text-center"  placeholder="Materiaux" ng-model="formData.materiaux">
+				<input type="date" class="form-control input-lg text-center"  placeholder="Date" ng-model="formData.date">
+				<input type="text" class="form-control input-lg text-center"  placeholder="Origine" ng-model="formData.origine">
+				<input type="text" class="form-control input-lg text-center"  placeholder="Valeur" ng-model="formData.valeur">
+				<input type="text"  class="form-control input-lg text-center"  placeholder="Image" ng-model="formData.image">
+			</div>
+
+
+			<!-- createToDo() WILL CREATE NEW TODOS -->
+			<button type="submit" class="btn btn-primary btn-lg" data-dismiss="modal" ng-click="createTodo()">Add</button>
+		</form>
+     </div>
+     <div class="modal-footer">
+Copyright
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<!-- Modal -->
+<div class="modal fade" id="image" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				<h4 class="modal-title" id="myModalLabel">Ajouter un objet</h4>
+			</div>
+
+			<div class="modal-body">
+
+
+				<ul ng-repeat="todo in todos | filter:fiche">
+					<img src="{{ todo.image }}"  width="200">
+					<li>{{ todo._id }}</li>
+			    	<li>{{ todo.nom }}</li>
+					<li>{{ todo.auteur }}</li>
+					<li>{{ todo.type }}</li>
+					<li>{{ todo.sstype }}</li>
+					<li>{{ todo.description }}</li>
+					<li>{{ todo.materiaux }}</li>
+					<li>{{ todo.date }}</li>
+					<li>{{ todo.origine }}</li>
+					<li>{{ todo.valeur }}</li>
+				</ul>
+			</div>
+			<div class="modal-footer">
+				Copyright
+			</div>
+		</div>
+  	</div>
+</div>
+
+
+		<!-- TODO LIST -->
+		<div   class="col-sm-1 col-sm-offset-1" >
+			<button class="btn btn-success btn-lg " data-toggle="modal" data-target="#myModal">
+			  Ajouter un objet
+			</button>
+		</div>
+
+		<div   class="col-sm-1 col-sm-offset-2">
+			<FORM ACTION="galerie"><button class="btn btn-primary btn-lg "TYPE="SUBMIT">Galerie</button></FORM> 
+		</div>
+
+		<div   class="col-sm-1 col-sm-offset-0">
+			<FORM ACTION="listing"><button class="btn btn-primary btn-lg "TYPE="SUBMIT">Listing</button></FORM> 
+		</div>
+		<div   class="col-sm-1 col-sm-offset-0">
+			<FORM ACTION="Timeline"><button class="btn btn-primary btn-lg "TYPE="SUBMIT">Time-Line</button></FORM> 
+		</div>
+		<div   class="col-sm-1 col-sm-offset-0">
+			<FORM ACTION="calendar"><button class="btn btn-primary btn-lg "TYPE="SUBMIT">Calendrier</button></FORM> 
+		</div>
+
+		<div  class="col-sm-2 col-sm-offset-1 text-right">
+			<form><p>Filtrer les objets</p><input type="text" ng-model="find"/></form>
+		</div> 
+
+
+		
+			<div class="col-sm-10 col-sm-offset-1" style="padding-top:30px;">					
+				<TABLE class="table table-hover">
+					<TR>
+						<TH>Nom</TH>
+						<TH>Auteur</TH>
+						<TH>Type</TH>
+						<TH>Sous-type</TH>
+						<TH>Description</TH>
+						<TH>Materiaux</TH>
+						<TH>Date</TH>
+						<TH>Origine</TH>
+						<TH>Valeur</TH>
+						<TH>Image</TH>
+						<TH>Actions</TH>
+					</TR>
+					<!-- LOOP OVER THE TODOS IN $scope.todos -->		
+					<TR ng-repeat="todo in todos | filter:find">
+						<TD data-toggle="modal" data-target="#image" ng-click="affiche(todo._id)">{{ todo.nom }}</TD>
+						<TD data-toggle="modal" data-target="#image" ng-click="affiche(todo._id)">{{ todo.auteur }}</TD>
+						<TD data-toggle="modal" data-target="#image" ng-click="affiche(todo._id)">{{ todo.type }}</TD>
+						<TD data-toggle="modal" data-target="#image" ng-click="affiche(todo._id)">{{ todo.sstype }}</TD>
+						<TD data-toggle="modal" data-target="#image" ng-click="affiche(todo._id)">{{ todo.description }}</TD>
+						<TD data-toggle="modal" data-target="#image" ng-click="affiche(todo._id)">{{ todo.materiaux }}</TD>
+						<TD data-toggle="modal" data-target="#image" ng-click="affiche(todo._id)">{{ todo.date }}</TD>
+						<TD data-toggle="modal" data-target="#image" ng-click="affiche(todo._id)">{{ todo.origine }}</TD>
+						<TD data-toggle="modal" data-target="#image" ng-click="affiche(todo._id)">{{ todo.valeur }}</TD>
+						<TD data-toggle="modal" data-target="#image" ng-click="affiche(todo._id)"><img src="{{ todo.image }}" height="42" width="42"></TD>
+						<TD><input  type="image" src="http://t1.gstatic.com/images?q=tbn:ANd9GcShkCkE9d1LKB4mxrm6wxLdaldFsW5DTYhUdaDD4dDt2lqyMYBpEV6Duhc" ng-click="deleteTodo(todo._id)"><input  type="image" src="http://cours.unjf.fr/theme/unjf_new/pix/i/edit.gif" data-toggle="modal" data-target="#edit"  ng-click="affiche(todo._id)"></TD>
+					</TR>
+				</TABLE>					
+			</div>
+</div>
+
+
+
+<div   class="col-sm-1 col-sm-offset-1" >
+<form method='post' action='/upload' enctype='multipart/form-data'>
+<input type='file' name='image'/>
+<input type='submit' /></form>
+</div>		
+
+</body>
+</html> 
+
